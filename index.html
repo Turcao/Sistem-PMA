@@ -6,46 +6,61 @@
   <style>
     * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { background-color: #f4f4f9; margin: 0; padding: 20px; color: #333; }
-    .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .container { max-width: 1050px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     
     /* Cabeçalho */
-    .header { text-align: center; border-bottom: 2px solid #6b46c1; padding-bottom: 15px; margin-bottom: 20px; }
-    .header h1 { margin: 0; color: #6b46c1; font-size: 28px; letter-spacing: 2px; }
-    .header p { margin: 5px 0 0; color: #666; font-weight: 500; letter-spacing: 1px; }
+    .header { text-align: center; border-bottom: 2px solid #6b46c1; padding-bottom: 12px; margin-bottom: 20px; }
+    .header h1 { margin: 0; color: #6b46c1; font-size: 26px; letter-spacing: 2px; }
+    .header p { margin: 4px 0 0; color: #666; font-weight: 500; letter-spacing: 1px; }
 
     /* Campos de Entrada */
-    .form-group { display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
+    .form-group { display: flex; gap: 15px; margin-bottom: 12px; flex-wrap: wrap; }
     .input-box { flex: 1; min-width: 180px; }
-    .input-box label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
-    .input-box input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+    .input-box label { display: block; font-weight: bold; margin-bottom: 4px; font-size: 13px; }
+    .input-box input { width: 100%; padding: 7px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
 
-    /* Tabela */
+    /* Tabela da Grade */
     table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 14px; }
-    th { background-color: #f8f8f8; color: #333; }
-    .col-qtd { width: 100px; }
-    .col-acao { width: 60px; text-align: center; }
+    th, td { border: 1px solid #ddd; padding: 6px 2px; text-align: center; font-size: 12px; }
+    th { background-color: #f8f8f8; color: #333; font-weight: bold; }
+    .col-desc { width: 22%; text-align: left; padding-left: 6px; }
+    .col-cor { width: 14%; text-align: left; padding-left: 6px; }
+    .col-tam { width: 4.8%; }
+    .col-subtotal { width: 8%; font-weight: bold; background-color: #fafafa; }
+    .col-acao { width: 40px; text-align: center; }
+
+    /* Inputs de Quantidade */
+    .grid-input { width: 100%; padding: 5px 2px; border: 1px solid #ccc; border-radius: 4px; text-align: center; font-size: 12px; }
+    .grid-input:focus { border-color: #6b46c1; outline: none; background-color: #f0ebf8; }
+
+    /* Seção de Defeitos */
+    .section-title { font-size: 14px; font-weight: bold; color: #c53030; margin-top: 25px; margin-bottom: 8px; border-bottom: 2px solid #feb2b2; padding-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .table-defetos th { background-color: #fff5f5; color: #9b2c2c; }
+    .total-defeito-row { font-weight: bold; background-color: #fff5f5; font-size: 14px; color: #9b2c2c; }
 
     /* Rodapé do Total */
-    .total-row { font-weight: bold; background-color: #f0ebf8; font-size: 16px; }
+    .total-row { font-weight: bold; background-color: #f0ebf8; font-size: 15px; }
 
     /* Botões */
     .btn { background: #6b46c1; color: #fff; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
     .btn:hover { background: #553c9a; }
-    .btn-danger { background: #e53e3e; padding: 5px 10px; font-size: 12px; }
+    .btn-warning { background: #dd6b20; }
+    .btn-warning:hover { background: #c05621; }
+    .btn-danger { background: #e53e3e; padding: 4px 8px; font-size: 11px; }
     .btn-danger:hover { background: #c53030; }
-    .actions { margin-top: 20px; display: flex; justify-content: space-between; }
+    .actions { margin-top: 20px; display: flex; justify-content: space-between; gap: 10px; }
 
     /* Assinatura */
-    .signature { display: none; margin-top: 50px; text-align: center; }
-    .signature-line { border-top: 1px solid #000; width: 300px; margin: 0 auto 5px; }
+    .signature { display: none; margin-top: 45px; text-align: center; }
+    .signature-line { border-top: 1px solid #000; width: 280px; margin: 0 auto 5px; }
 
-    /* REGRA DE IMPRESSÃO (Esconde o desnecessário ao imprimir) */
+    /* REGRAS DE IMPRESSÃO DA FICHA */
     @media print {
       body { background: #fff; padding: 0; }
       .container { box-shadow: none; padding: 0; width: 100%; max-width: 100%; }
       .no-print, .btn-danger, .col-acao { display: none !important; }
-      input { border: none !important; font-weight: bold; padding: 0 !important; }
+      input { border: none !important; font-weight: bold; padding: 0 !important; background: transparent !important; }
+      .grid-input { text-align: center; }
       .signature { display: block; }
     }
   </style>
@@ -53,13 +68,13 @@
 <body>
 
 <div class="container">
-  <!-- Cabeçalho com o Nome da Empresa -->
+  <!-- Cabeçalho -->
   <div class="header">
     <h1>PMA</h1>
     <p>ACABAMENTOS</p>
   </div>
 
-  <!-- Dados do Cliente, OS e Referência -->
+  <!-- Dados do Cliente -->
   <div class="form-group">
     <div class="input-box" style="flex: 2;">
       <label>Cliente:</label>
@@ -82,36 +97,71 @@
     </div>
   </div>
 
-  <!-- Tabela onde entram as peças -->
+  <!-- Tabela da Grade Completa -->
   <table id="tabela-pecas">
     <thead>
       <tr>
-        <th>Descrição do Item</th>
-        <th>Cor</th>
-        <th>Tamanho</th>
-        <th class="col-qtd">Qtd (un)</th>
+        <th class="col-desc">Descrição do Item</th>
+        <th class="col-cor">Cor</th>
+        <th class="col-tam">PP</th>
+        <th class="col-tam">P</th>
+        <th class="col-tam">M</th>
+        <th class="col-tam">G</th>
+        <th class="col-tam">GG</th>
+        <th class="col-tam">XG</th>
+        <th class="col-tam">EG</th>
+        <th class="col-tam">G1</th>
+        <th class="col-tam">G2</th>
+        <th class="col-tam">G3</th>
+        <th class="col-tam">G4</th>
+        <th class="col-subtotal">Total</th>
         <th class="col-acao no-print">Ação</th>
       </tr>
     </thead>
     <tbody id="corpo-tabela">
-      <!-- Linhas de peças entram aqui -->
+      <!-- As linhas de peças entrarão aqui -->
     </tbody>
     <tfoot>
       <tr class="total-row">
-        <td colspan="3" style="text-align: right;">TOTAL DE PEÇAS ENTREGUES:</td>
-        <td id="total-pecas">0</td>
+        <td colspan="13" style="text-align: right; padding-right: 12px;">TOTAL DE PEÇAS APROVADAS / ENTREGUES:</td>
+        <td id="total-geral" style="text-align: center;">0 un</td>
         <td class="col-acao no-print"></td>
       </tr>
     </tfoot>
   </table>
 
-  <!-- Botões de Controle (Escondidos na Impressão) -->
+  <!-- Bloco de Defeitos Simplificado -->
+  <div class="section-title">⚠️ Registro de Peças com Defeito</div>
+  <table id="tabela-defeitos" class="table-defetos">
+    <thead>
+      <tr>
+        <th style="width: 75%; text-align: left; padding-left: 8px;">Descrição do Defeito</th>
+        <th style="width: 20%;">Quantidade (un)</th>
+        <th class="col-acao no-print">Ação</th>
+      </tr>
+    </thead>
+    <tbody id="corpo-defeitos">
+      <!-- Linhas de defeito entrarão via JavaScript -->
+    </tbody>
+    <tfoot>
+      <tr class="total-defeito-row">
+        <td style="text-align: right; padding-right: 12px;">TOTAL DE PEÇAS COM DEFEITO:</td>
+        <td id="total-defeitos" style="text-align: center;">0 un</td>
+        <td class="col-acao no-print"></td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <!-- Botões de Ação -->
   <div class="actions no-print">
-    <button class="btn" onclick="adicionarLinha()">+ Adicionar Item</button>
+    <div>
+      <button class="btn" onclick="adicionarLinha()">+ Adicionar Modelo / Cor</button>
+      <button class="btn btn-warning" onclick="adicionarDefeito()">⚠️ + Registrar Defeito</button>
+    </div>
     <button class="btn" onclick="window.print()" style="background-color: #2b6cb0;">🖨️ Imprimir / Salvar PDF</button>
   </div>
 
-  <!-- Campo para Assinatura (Aparece apenas na Impressão/PDF) -->
+  <!-- Assinatura para Ficha Impressa -->
   <div class="signature">
     <div class="signature-line"></div>
     <p>Assinatura de Recebimento do Cliente</p>
@@ -122,44 +172,95 @@
   // Preenche a data de hoje automaticamente
   document.getElementById('data').valueAsDate = new Date();
 
-  // Função para adicionar nova linha de peça na tabela
-  function adicionarLinha(descricao = '', cor = '', tamanho = '', qtd = '') {
+  // Função para criar uma nova linha na tabela de PEÇAS
+  function adicionarLinha(desc = '', cor = '', pp='', p='', m='', g='', gg='', xg='', eg='', g1='', g2='', g3='', g4='') {
     const tbody = document.getElementById('corpo-tabela');
     const tr = document.createElement('tr');
 
     tr.innerHTML = `
-      <td><input type="text" placeholder="Ex: Baby Look Gola Careca" value="${descricao}"></td>
-      <td><input type="text" placeholder="Ex: Preto" value="${cor}"></td>
-      <td><input type="text" placeholder="Ex: P" value="${tamanho}"></td>
-      <td><input type="number" class="input-qtd" value="${qtd}" min="0" oninput="calcularTotal()"></td>
+      <td class="col-desc"><input type="text" class="grid-input" style="text-align:left; padding-left:4px;" placeholder="Ex: Baby Look Careca" value="${desc}"></td>
+      <td class="col-cor"><input type="text" class="grid-input" style="text-align:left; padding-left:4px;" placeholder="Ex: Preto" value="${cor}"></td>
+      <td><input type="number" class="grid-input qtd-item" min="0" value="${pp}" oninput="calcularTotais()"></td>
+      <td><input type="number" class="grid-input qtd-item" min="0" value="${p}" oninput="calcularTotais()"></td>
+      <td><input type="number" class="grid-input qtd-item" min="0" value="${m}" oninput="calcularTotais()"></td>
+      <td><input type="number" class="grid-input qtd-item" min="0" value="${g}" oninput="calcularTotais()"></td>
+      <td><input type="number" class="grid-input qtd-item" min="0" value="${gg}" oninput="calcularTotais()"></td>
+      <td><input type="number" class="grid-input qtd-item" min="0" value="${xg}" oninput="calcularTotais()"></td>
+      <td><input type="number" class="grid-input qtd-item" min="0" value="${eg}" oninput="calcularTotais()"></td>
+      <td><input type="number" class="grid-input qtd-item" min="0" value="${g1}" oninput="calcularTotais()"></td>
+      <td><input type="number" class="grid-input qtd-item" min="0" value="${g2}" oninput="calcularTotais()"></td>
+      <td><input type="number" class="grid-input qtd-item" min="0" value="${g3}" oninput="calcularTotais()"></td>
+      <td><input type="number" class="grid-input qtd-item" min="0" value="${g4}" oninput="calcularTotais()"></td>
+      <td class="col-subtotal subtotal-linha">0</td>
       <td class="col-acao no-print"><button class="btn btn-danger" onclick="removerLinha(this)">X</button></td>
     `;
 
     tbody.appendChild(tr);
-    calcularTotal();
+    calcularTotais();
   }
 
-  // Função para remover uma linha
+  // Função para criar uma linha na tabela de DEFEITOS (Apenas Descrição e Qtd)
+  function adicionarDefeito(descricao = '', qtd = '') {
+    const tbody = document.getElementById('corpo-defeitos');
+    const tr = document.createElement('tr');
+
+    tr.innerHTML = `
+      <td style="text-align:left;"><input type="text" class="grid-input" style="text-align:left; padding-left:4px;" placeholder="Ex: Furo na costura / Mancha de óleo" value="${descricao}"></td>
+      <td><input type="number" class="grid-input qtd-defeito" min="0" value="${qtd}" oninput="calcularTotaisDefeitos()"></td>
+      <td class="col-acao no-print"><button class="btn btn-danger" onclick="removerDefeito(this)">X</button></td>
+    `;
+
+    tbody.appendChild(tr);
+    calcularTotaisDefeitos();
+  }
+
   function removerLinha(btn) {
     btn.closest('tr').remove();
-    calcularTotal();
+    calcularTotais();
   }
 
-  // Função que faz a soma automática da coluna de Quantidades
-  function calcularTotal() {
-    const inputsQtd = document.querySelectorAll('.input-qtd');
-    let total = 0;
-    inputsQtd.forEach(input => {
-      const valor = parseFloat(input.value) || 0;
-      total += valor;
+  function removerDefeito(btn) {
+    btn.closest('tr').remove();
+    calcularTotaisDefeitos();
+  }
+
+  // Faz o cálculo automático das peças aprovadas
+  function calcularTotais() {
+    const linhas = document.querySelectorAll('#corpo-tabela tr');
+    let totalGeral = 0;
+
+    linhas.forEach(linha => {
+      const inputs = linha.querySelectorAll('.qtd-item');
+      let subtotalLinha = 0;
+
+      inputs.forEach(input => {
+        const valor = parseFloat(input.value) || 0;
+        subtotalLinha += valor;
+      });
+
+      linha.querySelector('.subtotal-linha').innerText = subtotalLinha;
+      totalGeral += subtotalLinha;
     });
-    document.getElementById('total-pecas').innerText = total + ' un';
+
+    document.getElementById('total-geral').innerText = totalGeral + ' un';
   }
 
-  // Adiciona 3 linhas iniciais por padrão com o exemplo
-  adicionarLinha('Baby Look Gola Careca', 'Preto', 'P', 30);
-  adicionarLinha('Baby Look Gola Careca', 'Preto', 'M', 20);
-  adicionarLinha('Baby Look Gola Careca', 'Preto', 'G', 10);
+  // Faz o cálculo automático dos defeitos
+  function calcularTotaisDefeitos() {
+    const inputsDefeito = document.querySelectorAll('.qtd-defeito');
+    let totalDefeitos = 0;
+
+    inputsDefeito.forEach(input => {
+      const valor = parseFloat(input.value) || 0;
+      totalDefeitos += valor;
+    });
+
+    document.getElementById('total-defeitos').innerText = totalDefeitos + ' un';
+  }
+
+  // Exemplo inicial ao abrir a página
+  adicionarLinha('Baby Look Gola Careca', 'Preto', '', 30, 20, 10, '', '', '', '', '', '', '');
+  adicionarDefeito('Furo na costura lateral', 2);
 </script>
 
 </body>
