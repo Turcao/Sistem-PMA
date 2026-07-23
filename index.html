@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>PMA Acabamentos - Ficha de Entrega</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #f4f4f9; margin: 0; padding: 20px; color: #333; }
+    .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    
+    /* Cabeçalho */
+    .header { text-align: center; border-bottom: 2px solid #6b46c1; padding-bottom: 15px; margin-bottom: 20px; }
+    .header h1 { margin: 0; color: #6b46c1; font-size: 28px; letter-spacing: 2px; }
+    .header p { margin: 5px 0 0; color: #666; font-weight: 500; letter-spacing: 1px; }
+
+    /* Campos de Entrada */
+    .form-group { display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
+    .input-box { flex: 1; min-width: 180px; }
+    .input-box label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
+    .input-box input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+
+    /* Tabela */
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 14px; }
+    th { background-color: #f8f8f8; color: #333; }
+    .col-qtd { width: 100px; }
+    .col-acao { width: 60px; text-align: center; }
+
+    /* Rodapé do Total */
+    .total-row { font-weight: bold; background-color: #f0ebf8; font-size: 16px; }
+
+    /* Botões */
+    .btn { background: #6b46c1; color: #fff; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    .btn:hover { background: #553c9a; }
+    .btn-danger { background: #e53e3e; padding: 5px 10px; font-size: 12px; }
+    .btn-danger:hover { background: #c53030; }
+    .actions { margin-top: 20px; display: flex; justify-content: space-between; }
+
+    /* Assinatura */
+    .signature { display: none; margin-top: 50px; text-align: center; }
+    .signature-line { border-top: 1px solid #000; width: 300px; margin: 0 auto 5px; }
+
+    /* REGRA DE IMPRESSÃO (Esconde o desnecessário ao imprimir) */
+    @media print {
+      body { background: #fff; padding: 0; }
+      .container { box-shadow: none; padding: 0; width: 100%; max-width: 100%; }
+      .no-print, .btn-danger, .col-acao { display: none !important; }
+      input { border: none !important; font-weight: bold; padding: 0 !important; }
+      .signature { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Cabeçalho com o Nome da Empresa -->
+  <div class="header">
+    <h1>PMA</h1>
+    <p>ACABAMENTOS</p>
+  </div>
+
+  <!-- Dados do Cliente, OS e Referência -->
+  <div class="form-group">
+    <div class="input-box" style="flex: 2;">
+      <label>Cliente:</label>
+      <input type="text" id="cliente" placeholder="Nome do Cliente">
+    </div>
+    <div class="input-box">
+      <label>Ref. Cliente:</label>
+      <input type="text" id="ref-cliente" placeholder="Ex: 10 / Pedido X">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="input-box">
+      <label>Nº da OS / Lote:</label>
+      <input type="text" id="os" placeholder="Ex: 58">
+    </div>
+    <div class="input-box">
+      <label>Data de Entrada:</label>
+      <input type="date" id="data">
+    </div>
+  </div>
+
+  <!-- Tabela onde entram as peças -->
+  <table id="tabela-pecas">
+    <thead>
+      <tr>
+        <th>Descrição do Item</th>
+        <th>Cor</th>
+        <th>Tamanho</th>
+        <th class="col-qtd">Qtd (un)</th>
+        <th class="col-acao no-print">Ação</th>
+      </tr>
+    </thead>
+    <tbody id="corpo-tabela">
+      <!-- Linhas de peças entram aqui -->
+    </tbody>
+    <tfoot>
+      <tr class="total-row">
+        <td colspan="3" style="text-align: right;">TOTAL DE PEÇAS ENTREGUES:</td>
+        <td id="total-pecas">0</td>
+        <td class="col-acao no-print"></td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <!-- Botões de Controle (Escondidos na Impressão) -->
+  <div class="actions no-print">
+    <button class="btn" onclick="adicionarLinha()">+ Adicionar Item</button>
+    <button class="btn" onclick="window.print()" style="background-color: #2b6cb0;">🖨️ Imprimir / Salvar PDF</button>
+  </div>
+
+  <!-- Campo para Assinatura (Aparece apenas na Impressão/PDF) -->
+  <div class="signature">
+    <div class="signature-line"></div>
+    <p>Assinatura de Recebimento do Cliente</p>
+  </div>
+</div>
+
+<script>
+  // Preenche a data de hoje automaticamente
+  document.getElementById('data').valueAsDate = new Date();
+
+  // Função para adicionar nova linha de peça na tabela
+  function adicionarLinha(descricao = '', cor = '', tamanho = '', qtd = '') {
+    const tbody = document.getElementById('corpo-tabela');
+    const tr = document.createElement('tr');
+
+    tr.innerHTML = `
+      <td><input type="text" placeholder="Ex: Baby Look Gola Careca" value="${descricao}"></td>
+      <td><input type="text" placeholder="Ex: Preto" value="${cor}"></td>
+      <td><input type="text" placeholder="Ex: P" value="${tamanho}"></td>
+      <td><input type="number" class="input-qtd" value="${qtd}" min="0" oninput="calcularTotal()"></td>
+      <td class="col-acao no-print"><button class="btn btn-danger" onclick="removerLinha(this)">X</button></td>
+    `;
+
+    tbody.appendChild(tr);
+    calcularTotal();
+  }
+
+  // Função para remover uma linha
+  function removerLinha(btn) {
+    btn.closest('tr').remove();
+    calcularTotal();
+  }
+
+  // Função que faz a soma automática da coluna de Quantidades
+  function calcularTotal() {
+    const inputsQtd = document.querySelectorAll('.input-qtd');
+    let total = 0;
+    inputsQtd.forEach(input => {
+      const valor = parseFloat(input.value) || 0;
+      total += valor;
+    });
+    document.getElementById('total-pecas').innerText = total + ' un';
+  }
+
+  // Adiciona 3 linhas iniciais por padrão com o exemplo
+  adicionarLinha('Baby Look Gola Careca', 'Preto', 'P', 30);
+  adicionarLinha('Baby Look Gola Careca', 'Preto', 'M', 20);
+  adicionarLinha('Baby Look Gola Careca', 'Preto', 'G', 10);
+</script>
+
+</body>
+</html>
